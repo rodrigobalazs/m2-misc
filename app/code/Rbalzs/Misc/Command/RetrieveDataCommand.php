@@ -18,7 +18,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Cms\Model\PageFactory;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Config\Model\ResourceModel\Config;
 
 /**
  * Command used to retrieve several information about magento 2 concepts (Customers, CMS Pages, Attributes, etc) and
@@ -88,9 +90,16 @@ class RetrieveDataCommand extends BaseCommand
     /**
      * EAV Model used to retrieve attributes information.
      *
-     * @var Config
+     * @var EavConfig
      */
     private $eavConfig;
+
+    /**
+     * Config object, used mostly to read/write inside 'core_config_data' table.
+     *
+     * @var Config
+     */
+    private $config;
 
     const LOG_PATH = '/var/log/retrievedata.log';
 
@@ -99,15 +108,16 @@ class RetrieveDataCommand extends BaseCommand
      *
      * @param State $appState
      * @param Registry $registry
+     * @param ResourceConnection $resourceConnection
      * @param CustomerRepositoryInterface $customerRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param CompanyRepositoryInterface $companyRepository
      * @param SharedCatalogRepositoryInterface $sharedCatalogRepository
-     * @param ResourceConnection $resourceConnection
      * @param PageFactory $pageFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param Config $eavConfig
+     * @param EavConfig $eavConfig
+     * @param Config $config
      */
     public function __construct(
         State $appState,
@@ -120,7 +130,8 @@ class RetrieveDataCommand extends BaseCommand
         SharedCatalogRepositoryInterface $sharedCatalogRepository,
         PageFactory $pageFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        Config $eavConfig
+        EavConfig $eavConfig,
+        Config $config
     )
     {
         parent::__construct($appState, $registry, $resourceConnection, self::LOG_PATH);
@@ -132,6 +143,7 @@ class RetrieveDataCommand extends BaseCommand
         $this->pageFactory = $pageFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->eavConfig = $eavConfig;
+        $this->config = $config;
     }
 
     protected function configure() {
@@ -150,8 +162,9 @@ class RetrieveDataCommand extends BaseCommand
         //$this->retrieveCustomerName('some_customer_email');
         //$this->retrieveCustomerEmail(1234);
         //$this->filterCmsPagesByTitle('some_page_title');
-        $this->retrieveAttributeLabel('catalog_product', 'visibility', 1);
+        //$this->retrieveAttributeLabel('catalog_product', 'visibility', 1);
         //$this->retrieveCityShippingAddress(52);
+        $this->allowReorders();
     }
 
     /**
@@ -253,5 +266,21 @@ class RetrieveDataCommand extends BaseCommand
 
         $this->logInfo('city associated to the order shipping address: ' . $city, $this->outputInterface);
         return $city;
+    }
+
+
+    /**
+     * Allow reorders; manually it could be applied also from the Magento Admin
+     * Stores => Configuration => SALES => Sales => Reorder => Allow Reorder
+     */
+    private function allowReorders(){
+        try {
+            $this->config->saveConfig('sales/reorder/allow', 0,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 1);
+            $this->logInfo('the configuration was saved sucessfully', $this->outputInterface);
+        } catch(\Exception $e){
+            $this->logInfo('there was an error during the configuration update, exception message: '
+                . $e->getMessage(), $this->outputInterface);
+        }
     }
 }
