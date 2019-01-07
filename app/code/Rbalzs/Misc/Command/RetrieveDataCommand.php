@@ -164,7 +164,8 @@ class RetrieveDataCommand extends BaseCommand
         //$this->filterCmsPagesByTitle('some_page_title');
         //$this->retrieveAttributeLabel('catalog_product', 'visibility', 1);
         //$this->retrieveCityShippingAddress(52);
-        $this->allowReorders();
+        //$this->allowReorders();
+        $this->retrieveLastQuoteId();
     }
 
     /**
@@ -282,5 +283,16 @@ class RetrieveDataCommand extends BaseCommand
             $this->logInfo('there was an error during the configuration update, exception message: '
                 . $e->getMessage(), $this->outputInterface);
         }
+    }
+
+    /**
+     * Retrieves the last Quote identifier, represents the newest Quote created in the system.
+     */
+    private function retrieveLastQuoteId(){
+        $result = $this->connection->fetchRow("SELECT entity_id
+            FROM quote ORDER BY entity_id DESC LIMIT 1");
+        $quoteId = $result["entity_id"];
+        $this->logInfo('newest quote Id: ' . $quoteId, $this->outputInterface);
+        return $quoteId;
     }
 }
