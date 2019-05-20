@@ -165,7 +165,9 @@ class RetrieveDataCommand extends BaseCommand
         //$this->retrieveAttributeLabel('catalog_product', 'visibility', 1);
         //$this->retrieveCityShippingAddress(52);
         //$this->allowReorders();
-        $this->retrieveLastQuoteId();
+        //$this->retrieveLastQuoteId();
+        $this->retrieveAttributeValue('catalog_product', 'visibility',
+            'Not Visible Individually');
     }
 
     /**
@@ -294,5 +296,35 @@ class RetrieveDataCommand extends BaseCommand
         $quoteId = $result["entity_id"];
         $this->logInfo('newest quote Id: ' . $quoteId, $this->outputInterface);
         return $quoteId;
+    }
+
+    /**
+     * Retrieves the attribute value associated to a given attribute label.
+     *
+     * @param $entity entity which the attribute belongs to, example 'catalog_product'.
+     * @param $attributeCode attribute code, example 'visibility'.
+     * @param $attributeValue attribute label, example 'Not Visible Individually'
+     *
+     * @return attribute value, example '1'
+     */
+    private function retrieveAttributeValue($entity, $attributeCode, $attributeLabel){
+        $attribute = $this->eavConfig->getAttribute($entity, $attributeCode);
+        if(empty($attribute)){
+            return null;
+        }
+        $options = $attribute->getSource()->getAllOptions();
+        if(empty($options)){
+            return null;
+        }
+
+        foreach ($options as $option) {
+            if ($option['label'] == $attributeLabel) {
+                $this->logInfo('attribute code: ' . $attributeCode, $this->outputInterface);
+                $this->logInfo('attribute value: ' . $option['value'], $this->outputInterface);
+                $this->logInfo('attribute label: ' . $attributeLabel, $this->outputInterface);
+                return $option['value'];
+            }
+        }
+        return null;
     }
 }
