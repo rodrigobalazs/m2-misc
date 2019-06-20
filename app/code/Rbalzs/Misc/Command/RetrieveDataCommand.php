@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\App\State;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManagerInterface;
 
 use Magento\Cms\Model\PageFactory;
 
@@ -101,6 +102,15 @@ class RetrieveDataCommand extends BaseCommand
      */
     private $config;
 
+    /**
+     * Sometimes the object injection via constructor() throws errors like 'area code not set',
+     * so as a workarround, altought its not a good practice, we need to end up using the
+     * object manager to get valid object instances.
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
     const LOG_PATH = '/var/log/retrievedata.log';
 
     /**
@@ -118,6 +128,7 @@ class RetrieveDataCommand extends BaseCommand
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EavConfig $eavConfig
      * @param Config $config
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         State $appState,
@@ -131,7 +142,8 @@ class RetrieveDataCommand extends BaseCommand
         PageFactory $pageFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EavConfig $eavConfig,
-        Config $config
+        Config $config,
+        ObjectManagerInterface $objectManager
     )
     {
         parent::__construct($appState, $registry, $resourceConnection, self::LOG_PATH);
@@ -144,6 +156,7 @@ class RetrieveDataCommand extends BaseCommand
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->eavConfig = $eavConfig;
         $this->config = $config;
+        $this->objectManager = $objectManager;
     }
 
     protected function configure() {
@@ -166,8 +179,8 @@ class RetrieveDataCommand extends BaseCommand
         //$this->retrieveCityShippingAddress(52);
         //$this->allowReorders();
         //$this->retrieveLastQuoteId();
-        $this->retrieveAttributeValue('catalog_product', 'visibility',
-            'Not Visible Individually');
+        //$this->retrieveAttributeValue('catalog_product', 'visibility', 'Not Visible Individually');
+        $this->test();
     }
 
     /**
@@ -326,5 +339,12 @@ class RetrieveDataCommand extends BaseCommand
             }
         }
         return null;
+    }
+
+    /**
+     * Placeholder to test misc functionality.
+     */
+    private function test(){
+        $this->logInfo('START execution of RetrieveDataCommand->test()', $this->outputInterface);
     }
 }
