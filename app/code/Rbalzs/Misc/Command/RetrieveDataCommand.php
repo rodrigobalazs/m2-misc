@@ -22,6 +22,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Config\Model\ResourceModel\Config;
+use Magento\Shipping\Model\Config\Source\Allmethods;
 
 /**
  * Command used to retrieve several information about magento 2 concepts (Customers, CMS Pages, Attributes, etc) and
@@ -111,6 +112,13 @@ class RetrieveDataCommand extends BaseCommand
      */
     private $objectManager;
 
+    /**
+     * Represent Shipping Methods (like UPS).
+     *
+     * @var Allmethods
+     */
+    private $shippingMethodsOptions;
+
     const LOG_PATH = '/var/log/retrievedata.log';
 
     /**
@@ -129,6 +137,7 @@ class RetrieveDataCommand extends BaseCommand
      * @param EavConfig $eavConfig
      * @param Config $config
      * @param ObjectManagerInterface $objectManager
+     * @param Allmethods $shippingMethodsOptions
      */
     public function __construct(
         State $appState,
@@ -143,7 +152,8 @@ class RetrieveDataCommand extends BaseCommand
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EavConfig $eavConfig,
         Config $config,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Allmethods $shippingMethodsOptions
     )
     {
         parent::__construct($appState, $registry, $resourceConnection, self::LOG_PATH);
@@ -157,6 +167,7 @@ class RetrieveDataCommand extends BaseCommand
         $this->eavConfig = $eavConfig;
         $this->config = $config;
         $this->objectManager = $objectManager;
+        $this->shippingMethodsOptions = $shippingMethodsOptions;
     }
 
     protected function configure() {
@@ -180,7 +191,8 @@ class RetrieveDataCommand extends BaseCommand
         //$this->allowReorders();
         //$this->retrieveLastQuoteId();
         //$this->retrieveAttributeValue('catalog_product', 'visibility', 'Not Visible Individually');
-        $this->test();
+        $this->displayShippingMethodsCodeTitle();
+        //$this->test();
     }
 
     /**
@@ -339,6 +351,19 @@ class RetrieveDataCommand extends BaseCommand
             }
         }
         return null;
+    }
+
+    /**
+     * Displays a list of carrier_code/title (e.g ups / United Parcel Service)
+     * associated to each available 'Shipping Method' in Magento2.
+     */
+    private function displayShippingMethodsCodeTitle(){
+        $this->logInfo('available shipping methods (carrier_code,title):', $this->outputInterface);
+        $shippingMethodsOptions = $this->shippingMethodsOptions->toOptionArray();
+        foreach ($shippingMethodsOptions as $k => $v) {
+            $this->logInfo('carrier_code:' . $k,  $this->outputInterface);
+            $this->logInfo('title:' . $v["label"],  $this->outputInterface);
+        }
     }
 
     /**
