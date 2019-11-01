@@ -5,8 +5,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Company\Api\CompanyRepositoryInterface;
-use Magento\SharedCatalog\Api\SharedCatalogRepositoryInterface;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,20 +51,6 @@ class RetrieveDataCommand extends BaseCommand
      * @var AddressRepositoryInterface
      */
     private $addressRepository;
-
-    /**
-     * Company Repository.
-     *
-     * @var CompanyRepositoryInterface
-     */
-    private $companyRepository;
-
-    /**
-     * Shared Catalog Repository.
-     *
-     * @var SharedCatalogRepositoryInterface
-     */
-    private $sharedCatalogRepository;
 
     /**
     * Used to log in the command line.
@@ -130,8 +114,6 @@ class RetrieveDataCommand extends BaseCommand
      * @param CustomerRepositoryInterface $customerRepository
      * @param OrderRepositoryInterface $orderRepository
      * @param AddressRepositoryInterface $addressRepository
-     * @param CompanyRepositoryInterface $companyRepository
-     * @param SharedCatalogRepositoryInterface $sharedCatalogRepository
      * @param PageFactory $pageFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param EavConfig $eavConfig
@@ -146,8 +128,6 @@ class RetrieveDataCommand extends BaseCommand
         CustomerRepositoryInterface $customerRepository,
         OrderRepositoryInterface $orderRepository,
         AddressRepositoryInterface $addressRepository,
-        CompanyRepositoryInterface $companyRepository,
-        SharedCatalogRepositoryInterface $sharedCatalogRepository,
         PageFactory $pageFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         EavConfig $eavConfig,
@@ -160,8 +140,6 @@ class RetrieveDataCommand extends BaseCommand
         $this->customerRepository = $customerRepository;
         $this->orderRepository = $orderRepository;
         $this->addressRepository = $addressRepository;
-        $this->companyRepository = $companyRepository;
-        $this->sharedCatalogRepository = $sharedCatalogRepository;
         $this->pageFactory = $pageFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->eavConfig = $eavConfig;
@@ -191,8 +169,8 @@ class RetrieveDataCommand extends BaseCommand
         //$this->allowReorders();
         //$this->retrieveLastQuoteId();
         //$this->retrieveAttributeValue('catalog_product', 'visibility', 'Not Visible Individually');
-        $this->displayShippingMethodsCodeTitle();
-        //$this->test();
+        //$this->displayShippingMethodsCodeTitle();
+        $this->test();
     }
 
     /**
