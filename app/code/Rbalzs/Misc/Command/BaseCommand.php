@@ -16,7 +16,7 @@ use Zend\Log\Writer\Stream;
 abstract class BaseCommand extends Command
 {
     /**
-     * Zend logger.
+     * Logger implementation with Zend logger which allows log to specific files.
      *
      * @var Stream
      */
@@ -50,8 +50,7 @@ abstract class BaseCommand extends Command
         Registry $registry,
         ResourceConnection $resourceConnection,
         $zendLoggerFileLocation
-    )
-    {
+    ) {
         $this->appState = $appState;
         $this->registry = $registry;
         $this->connection = $resourceConnection->getConnection(ResourceConnection::DEFAULT_CONNECTION);
@@ -62,46 +61,37 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * Logs the input given as param both on the command line and in an
-     * specific log file with an INFO severity.
+     * Logs with INFO severity.
      *
-     * @param $message message to log.
-     * @param $outputInterface output interface.
+     * @param string $message message to log.
      */
-    protected function logInfo($message, $outputInterface){
-        $outputInterface->writeln($message);
+    protected function logInfo($message)
+    {
         $this->zendLogger->info($message);
     }
 
     /**
-     * Logs the input given as param both on the command line and in an
-     * specific log file with an ERROR severity.
+     * Logs with ERROR severity.
      *
-     * @param $exceptionMessage exception message to log.
-     * @param $outputInterface output interface.
+     * @param string $message message to log.
      */
-    protected function logError($exceptionMessage, $outputInterface){
-        $outputInterface->writeln('exception message: ' . $exceptionMessage);
-        $this->zendLogger->err($exceptionMessage);
-    }
-
-    /**
-     * Avoid magento error 'operation is forbidden for current area'.
-     */
-    protected function setSecureArea(){
-        $this->registry->register('isSecureArea', true);
+    protected function logError($message)
+    {
+        $this->zendLogger->err($message);
     }
 
     /**
      * Avoid magento error 'area code not set', the catch statement is intentionally
      * empty to bypass the 'area code' error.
      *
-     * implementation note => this method should be executed on execute() method rather
+     * Implementation note => this method should be executed on execute() method rather
      * than constructor(), if not, seems that magento breaks its normal flow.
      */
-    protected function setAreaCode(){
+    protected function setAreaCode()
+    {
         try {
             $this->appState->setAreaCode('global');
-        } catch (LocalizedException $e) {}
+        } catch (LocalizedException $e) {
+        }
     }
 }
