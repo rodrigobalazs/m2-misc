@@ -179,7 +179,7 @@ class RetrieveDataCommand extends BaseCommand
         $pages = $this->pageFactory->create()->getCollection();
         $pages->addFieldToSelect(['title','identifier']);
         $pages->addFieldToFilter('is_active', 1);
-        $pages->addFieldToFilter('title', array('like' => '%'. $title .'%'));
+        $pages->addFieldToFilter('title', ['like' => '%'. $title .'%']);
 
         foreach ($pages as $page) {
             $this->logInfo(__METHOD__ . ' CMS page identifier: ' . $page['page_id']);

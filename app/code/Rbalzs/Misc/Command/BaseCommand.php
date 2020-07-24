@@ -81,8 +81,7 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * Avoid magento error 'area code not set', the catch statement is intentionally
-     * empty to bypass the 'area code' error.
+     * Avoid magento error 'area code not set'.
      *
      * Implementation note => this method should be executed on execute() method rather
      * than constructor(), if not, seems that magento breaks its normal flow.
@@ -92,6 +91,7 @@ abstract class BaseCommand extends Command
         try {
             $this->appState->setAreaCode('global');
         } catch (LocalizedException $e) {
+              $this->logger->error(__METHOD__ . ' there was an error trying to set the Area Code: ' . $e->getMessage());
         }
     }
 }
