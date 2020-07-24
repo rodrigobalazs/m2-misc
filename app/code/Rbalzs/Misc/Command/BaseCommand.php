@@ -91,7 +91,7 @@ abstract class BaseCommand extends Command
         try {
             $this->appState->setAreaCode('global');
         } catch (LocalizedException $e) {
-              $this->logger->error(__METHOD__ . ' there was an error trying to set the Area Code: ' . $e->getMessage());
+              $this->logError(__METHOD__ . ' there was an error trying to set the Area Code: ' . $e->getMessage());
         }
     }
 }
