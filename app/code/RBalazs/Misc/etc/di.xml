@@ -3,7 +3,7 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="retrieve_data_cl_tool" xsi:type="object">Rbalzs\Misc\Command\RetrieveDataCommand</item>
+                <item name="retrieve_data_cl_tool" xsi:type="object">RBalazs\Misc\Command\RetrieveDataCommand</item>
             </argument>
         </arguments>
     </type>

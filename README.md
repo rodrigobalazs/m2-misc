@@ -2,8 +2,8 @@
 
 ## Installation
 ```
-composer require rbalzs/misc;
-bin/magento module:enable Rbalzs_Misc;
+composer require rbalazs/misc;
+bin/magento module:enable RBalazs_Misc;
 bin/magento setup:upgrade;
 ```
 ## RetrieveDataCommand

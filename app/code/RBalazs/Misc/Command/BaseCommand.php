@@ -1,5 +1,5 @@
 <?php
-namespace Rbalzs\Misc\Command;
+namespace RBalazs\Misc\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\Exception\LocalizedException;
@@ -12,6 +12,8 @@ use Zend\Log\Writer\Stream;
 
 /**
  * Abstract Command with some infrastructure(logging,set magento area code,etc) methods.
+ *
+ * @author Rodrigo Balazs
  */
 abstract class BaseCommand extends Command
 {

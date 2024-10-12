@@ -1,5 +1,5 @@
 <?php
-namespace Rbalzs\Misc\Command;
+namespace RBalazs\Misc\Command;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -31,6 +31,8 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * log info:
  * tail -f <m2root>/var/log/retrievedata.log;
+ *
+ * @author Rodrigo Balazs
  */
 class RetrieveDataCommand extends BaseCommand
 {
@@ -139,14 +141,7 @@ class RetrieveDataCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->setAreaCode();
-        //$this->retrieveCustomerName('somecustomer@email.com');
-        //$this->displayCmsPageIds('some_page_title');
-        //$this->allowReorders();
-        //$this->retrieveLastQuoteId();
-        /*$this->logInfo(__METHOD__ . ' Attribute Value: ' .
-            $this->retrieveAttributeValue('catalog_product', 'visibility', 'Not Visible Individually'));*/
-        //$this->displayShippingMethods();
-        //$this->test();
+        $this->retrieveCustomerName('somecustomer@email.com');
     }
 
     /**
