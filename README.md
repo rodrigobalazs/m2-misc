@@ -6,9 +6,7 @@ for testing purposes. In other hand, the idea it´s show usage of common objects
 ### 🔧 Technology Stack
 
 ###### Magento 2
-###### PHP
-###### Warden
-###### Composer
+###### PHP / Warden / Composer
 
 ### ⚒️ Getting Started
 
