@@ -12,8 +12,6 @@ use Zend\Log\Writer\Stream;
 
 /**
  * Abstract Command with some infrastructure(logging,set magento area code,etc) methods.
- *
- * @author Rodrigo Balazs
  */
 abstract class BaseCommand extends Command
 {

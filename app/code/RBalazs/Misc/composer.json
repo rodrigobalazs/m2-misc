@@ -1,11 +1,14 @@
 {
   "name": "rbalazs/misc",
   "description": "Magento2 misc examples",
+  "authors": [{
+    "name": "Rodrigo Balazs",
+    "email": "rodrigobalazs@gmail.com"
+  }],
   "type": "magento2-module",
   "version": "0.0.1",
   "license": [
-    "OSL-3.0",
-    "AFL-3.0"
+    "MIT"
   ],
   "require": {
     "php": "~7.1.0",
